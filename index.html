@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <title>IMDB Rating</title>
+</head>
+<body>
+    <div class="container-fluid text-center" style="width:auto">
+        <h1>MOVIE RATING</h1>
+        <div class="card mt-5" >
+        <div class="card-body">
+        <input placeholder="Enter Movie name" id="movie" class="form-control"></input>
+        <br>
+        <button type="button" class="btn btn-success mb-5" id="b1" onclick="retrieve()">Search</button>
+        <div class="container text-center text-bg-dark"  id="result">
+            <div class="row align-items-start text-bg-dark " id="title" style="text-align: left ;">
+                
+            </div>
+
+            
+            <div class="row align-items-start " >
+                
+              <div class="col-md-4 order-md-1 " id="result1">
+                
+              </div>
+              <div class="col-md-8 order-md-2" id="result2"  >
+                
+                
+              </div>
+              
+            </div>
+          </div>
+          
+        
+</div>
+    </div>
+    <script >
+        function retrieve(){
+    var moviename=document.getElementById("movie").value
+    if (moviename===""){
+    alert("Enter movie name")
+    }
+    
+        var url="https://api.themoviedb.org/3/search/movie?api_key=27425388635bf4f6e638b077712c7bca&language=en-US&query="+moviename+"&page=1&include_adult=true"
+        fetch(url)
+        .then(response => response.json())
+        .then(data=>{
+            var resp_code = data['results']
+            if (resp_code.length === 0){
+                
+                
+                
+                document.getElementById('b1').innerHTML=window.location.reload()
+                
+                alert('Movie Not Found')
+                
+
+                
+                
+                
+                
+                
+                
+            }
+            else{ 
+                
+
+                var movie_name=data['results'][0]['original_title']
+                var poster=data['results'][0]['poster_path']
+                var posterUrl = `https://image.tmdb.org/t/p/w500${poster}`
+                var release=data['results'][0]['release_date']
+
+                var movieRating = data['results'][0]['vote_average']
+                var votecount=data['results'][0]['vote_count']
+                var synopsis = data['results'][0]['overview']
+                var popularity = data['results'][0]['popularity']
+
+
+                console.log(movieRating)
+
+                
+                //document.getElementById("result1").innerHTML='<h3>Title:'+movie_name+'</h3><br><br><img src='+posterUrl+' height=500px width=500px>'
+                var element = 
+                `<div class="card text-bg-dark " style="width: auto;">
+                    <ul class="list-group list-group-flush " style="text-align:left">
+                        <li class="list-group-item text-bg-dark ">Release date: `+release+`</li>
+                        <br>
+                        <li class="list-group-item text-bg-dark "><i class="bi bi-star-fill"></i>Rating: `+movieRating.toFixed(1)+`/10</li>
+                        <br>
+                        <li class="list-group-item text-bg-dark ">Vote Count: `+votecount+`</li>
+                        <br>
+                        <li class="list-group-item text-bg-dark "> Popularity: `+popularity+`</li>
+                        <br>
+                        <li class="list-group-item text-bg-dark ">Synopsis: `+synopsis+`</li>
+                    </ul>
+                    </div>`
+                var element1 =
+                `<div class="card text-bg-dark mt-4" style="width: 100%; ">
+                    
+                    <img src=`+posterUrl+` class="card-img-top" height=500px alt="...">
+                    
+                    
+                    </div>  `  
+                document.getElementById("title").innerHTML='<h3>Title: '+movie_name +`</h3>`   
+                document.getElementById("result1").innerHTML=element1    
+                document.getElementById("result2").innerHTML=element  
+                 
+                //document.getElementById("result2").innerHTML='<b>Release Date:</b><br>'+release+'<br><b>Rating:</b><br>'+movieRating.toFixed(2)+'/10'+'<br><b>Vote Count:</b><br>'+votecount+'<br><b>Synopsis:</b><br>'+synopsis
+            }
+
+        })
+    }
+
+    
+    
+
+
+    </script>
+        
+    
+    
+</body>
+</html>
